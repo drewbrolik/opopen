@@ -1,0 +1,145 @@
+:root {
+
+  --color-modifier-h: 0;
+  --color-modifier-s: 0;
+
+  --stop-color-1-h: calc(220 - var(--color-modifier-h));
+  --stop-color-2-h: calc(220 - var(--color-modifier-h));
+  --stop-color-3-h: calc(255 - var(--color-modifier-h));
+  --stop-color-4-h: calc(257 - var(--color-modifier-h));
+
+  /*--stop-color-1-h-m: calc(var(--stop-color-1-h) - 360 * floor(var(--stop-color-1-h) / 360));*/
+  /*--division: calc(var(--stop-color-1-h) / 360);
+  --integer-division: calc(var(--division) * 1px);
+  --remainder: calc(var(--stop-color-1-h) - var(--integer-division) * 360);
+  --stop-color-1-h-m: calc(var(--remainder) * 1%);*/
+
+  --stop-color-1-s: calc(56% - var(--color-modifier-s) * 1%);
+  --stop-color-2-s: calc(56% - var(--color-modifier-s) * 1%);
+  --stop-color-3-s: calc(70% - var(--color-modifier-s) * 1%);
+  --stop-color-4-s: calc(78% - var(--color-modifier-s) * 1%);
+
+  --stop-color-1: hsla(var(--stop-color-1-h),var(--stop-color-1-s),35%,1); /*#27498B;*/
+  --stop-color-2: hsla(var(--stop-color-2-h),var(--stop-color-2-s),22%,1); /*#182D56;*/
+  --stop-color-3: hsla(var(--stop-color-3-h),var(--stop-color-3-s),9%,1); /*#0F0727;*/
+  --stop-color-4: hsla(var(--stop-color-4-h),var(--stop-color-4-s),4%,1); /*#060210;*/
+  /*--stop-color-5: #ffffff;
+  --stop-color-6: #000000;*/
+
+  --stop-opacity-1: 0.2;
+  --stop-opacity-2: 0.16;
+  --stop-opacity-3: 0.02;
+  --stop-opacity-4: 0;
+
+  /*--bg-color-h: calc(220 - var(--color-modifier-h));*/
+  --bg-color:var(--stop-color-2); /*hsla(var(--bg-color-h),56%,10%,1);*/
+
+  --popper-size:3.125%; /* 32 x 32 */
+  --popper-size:6.25%;
+
+  --size-w:90dvh;
+  --size-mw:90vw;
+  --size-h:90dvh;
+  --size-mh:90vw;
+}
+
+html, body {
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+html{ height:100%; }
+body {
+    background-color:var(--stop-color-1); /*rgba(0,0,0,1);*/
+    /*background-image: repeating-linear-gradient(-35deg, rgba(13,13,13,1), rgba(100,100,100,1));*/
+    font-family: 'Micro 5',Arial,sans-serif;
+    font-size:var(--font-size);
+    color:white;
+    min-height: 100%;
+    /*display:grid;
+    place-items: center;*/
+    padding:0;
+    margin:0;
+
+    background-image: url('noise1.svg');
+    background-size: 50%;
+
+    display: grid;
+    grid-template-columns: auto auto;
+    place-items: center;
+}
+
+main {
+  background-color:var(--bg-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap:0px;
+  line-height:0;
+  position: relative;
+  max-width: 900px;
+  margin: auto;
+  padding:1vw;
+  box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35);
+  border-radius: .8vw;
+
+  width:var(--size-w);
+  height:var(--size-h);
+  max-width:var(--size-mw);
+  max-height:var(--size-mh);
+}
+
+.popper {
+
+}
+
+.popper.black {
+  filter:brightness(.8);
+  -webkit-filter:brightness(.8);
+}
+
+.popper.white {
+  filter:brightness(1.2);
+  -webkit-filter:brightness(1.2);
+}
+
+.popper.pressed {
+  position:relative; 
+  width:var(--popper-size);
+  padding-bottom:var(--popper-size);
+  border-radius:50%; 
+  background: linear-gradient(132.995deg, var(--stop-color-4) 8%, var(--stop-color-3) 25%, var(--stop-color-2) 56%, var(--stop-color-1) 82%); /*linear-gradient(132.995deg, #060210 8%, #0F0727 25%, #182D56 56%, #27498B 82%);*/
+}
+
+.popper.depressed {
+  position:relative; 
+  width:var(--popper-size); 
+  padding-bottom:var(--popper-size);
+  border-radius:50%; 
+  background: linear-gradient(132.995deg, var(--stop-color-1) 18%, var(--stop-color-2) 44%, var(--stop-color-3) 75%, var(--stop-color-4) 92%); /*linear-gradient(132.995deg, #27498B 18%, #182D56 44%, #0F0727 75%, #060210 92%);*/
+  /*box-shadow: inset 0 0 1px var(--stop-color-3);*/
+}
+
+.popper.pressed > * {
+  position:absolute; 
+  top:2.5%; 
+  left:2.5%; 
+  width:95%; 
+  height:95%; 
+  border-radius:50%; 
+  background: linear-gradient(132.995deg, rgba(0, 0, 0, 0%) 8%, rgba(0, 0, 0, 2%) 25%, rgba(0, 0, 0, 16%) 56%, rgba(0, 0, 0, 20%) 82%); 
+  mask: radial-gradient(circle, rgba(0,0,0,0) 54%, rgba(0,0,0,1) 60%);
+  -webkit-mask: radial-gradient(circle, rgba(0,0,0,0) 54%, rgba(0,0,0,1) 60%); /* (50% / 66%) */
+}
+
+.popper.depressed > * {
+  position:absolute; 
+  top:2.5%; 
+  left:2.5%; 
+  width:95%; 
+  height:95%; 
+  border-radius:50%; 
+  background: linear-gradient(132.995deg, rgba(255, 255, 255, 20%) 18%, rgba(255, 255, 255, 16%) 34%, rgba(255, 255, 255, 2%) 75%, rgba(255, 255, 255, 0%) 92%); 
+  mask: radial-gradient(circle, rgba(0,0,0,1) 13%, rgba(0,0,0,0) 60%, rgba(0,0,0,.6) 80%);
+  -webkit-mask: radial-gradient(circle, rgba(0,0,0,1) 13%, rgba(0,0,0,0) 60%, rgba(0,0,0,.6) 80%);
+  box-shadow: inset 0 0 20px 0px black;
+}
