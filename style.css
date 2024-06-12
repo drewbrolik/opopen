@@ -3,39 +3,30 @@
   --color-modifier-h: 0;
   --color-modifier-s: 0;
 
-  --stop-color-1-h: calc(220 - var(--color-modifier-h));
-  --stop-color-2-h: calc(220 - var(--color-modifier-h));
-  --stop-color-3-h: calc(255 - var(--color-modifier-h));
-  --stop-color-4-h: calc(257 - var(--color-modifier-h));
+  --stop-color-1-h: 0; /* calc(220 - var(--color-modifier-h)); */
+  --stop-color-2-h: 0; /* calc(220 - var(--color-modifier-h)); */
+  --stop-color-3-h: 0; /* calc(255 - var(--color-modifier-h)); */
+  --stop-color-4-h: 0; /* calc(257 - var(--color-modifier-h)); */
 
-  /*--stop-color-1-h-m: calc(var(--stop-color-1-h) - 360 * floor(var(--stop-color-1-h) / 360));*/
-  /*--division: calc(var(--stop-color-1-h) / 360);
-  --integer-division: calc(var(--division) * 1px);
-  --remainder: calc(var(--stop-color-1-h) - var(--integer-division) * 360);
-  --stop-color-1-h-m: calc(var(--remainder) * 1%);*/
-
-  --stop-color-1-s: calc(56% - var(--color-modifier-s) * 1%);
-  --stop-color-2-s: calc(56% - var(--color-modifier-s) * 1%);
-  --stop-color-3-s: calc(70% - var(--color-modifier-s) * 1%);
-  --stop-color-4-s: calc(78% - var(--color-modifier-s) * 1%);
+  --stop-color-1-s: 0%; /* calc(56% - var(--color-modifier-s) * 1%); */
+  --stop-color-2-s: 0%; /* calc(56% - var(--color-modifier-s) * 1%); */
+  --stop-color-3-s: 0%; /* calc(70% - var(--color-modifier-s) * 1%); */
+  --stop-color-4-s: 0%; /* calc(78% - var(--color-modifier-s) * 1%); */
 
   --stop-color-1: hsla(var(--stop-color-1-h),var(--stop-color-1-s),35%,1); /*#27498B;*/
   --stop-color-2: hsla(var(--stop-color-2-h),var(--stop-color-2-s),22%,1); /*#182D56;*/
   --stop-color-3: hsla(var(--stop-color-3-h),var(--stop-color-3-s),9%,1); /*#0F0727;*/
   --stop-color-4: hsla(var(--stop-color-4-h),var(--stop-color-4-s),4%,1); /*#060210;*/
-  /*--stop-color-5: #ffffff;
-  --stop-color-6: #000000;*/
 
   --stop-opacity-1: 0.2;
   --stop-opacity-2: 0.16;
   --stop-opacity-3: 0.02;
   --stop-opacity-4: 0;
 
-  /*--bg-color-h: calc(220 - var(--color-modifier-h));*/
   --bg-color:var(--stop-color-2); /*hsla(var(--bg-color-h),56%,10%,1);*/
 
   --popper-size:3.125%; /* 32 x 32 */
-  --popper-size:6.25%;
+  --popper-size:6.25%; /* 16 x 16 */
 
   --size-w:90dvh;
   --size-mw:90vw;
@@ -83,10 +74,27 @@ main {
   height:var(--size-h);
   max-width:var(--size-mw);
   max-height:var(--size-mh);
+
+  cursor: grab;
+}
+main.active {
+  cursor: grabbing;
+}
+main.correct {
+  /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;*/
+  animation:correctPulse 1s infinite;
 }
 
-.popper {
-
+@keyframes correctPulse {
+  0% {
+    box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;
+  }
+  50% {
+    box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 4vw white;
+  }
+  100% {
+    box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;
+  }
 }
 
 .popper.capped {
@@ -162,3 +170,38 @@ main {
   -webkit-mask: radial-gradient(circle, rgba(0,0,0,1) 13%, rgba(0,0,0,0) 60%, rgba(0,0,0,.6) 80%);
   box-shadow: inset 0 0 20px 0px black;
 }
+
+
+
+
+/*input#startgame[type=checkbox] {
+    appearance: none;
+    background-color: rgba(40,40,40,1);
+    background-image: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.5));
+    position:relative;
+    width:2.5em;
+    height:1em;
+    margin-left:auto;
+    margin-right:auto;
+    cursor:pointer;
+}
+input#startgame[type=checkbox]::after {
+    content:" ";
+    background-color: white;
+    background-image: repeating-linear-gradient(90deg, rgba(100,100,100,1) 49.9%, rgba(0,0,0,1) 50%);
+    background-size: 20%;
+    background-repeat: repeat-x;
+    position:absolute;
+    width:40%;
+    height:100%;
+    left:50%;
+    top:0%;
+    transform:translateY(-4px);
+    border-bottom:4px solid rgba(20,20,20,1);
+}
+input#startgame[type=checkbox]:checked {
+    
+}
+input#startgame[type=checkbox]:checked::after {
+    left:10%;
+}*/

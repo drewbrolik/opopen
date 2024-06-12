@@ -1,6 +1,10 @@
-const mainElement = document.querySelector("main");
-
 document.addEventListener("DOMContentLoaded", function () {
+
+    const mainElement = document.querySelector("main");
+    const invertElement = document.querySelector("#invert");
+    const clearElement = document.querySelector("#clear");
+    const resetElement = document.querySelector("#reset");
+    const startGameElement = document.querySelector("#startgame");
 
     let R = new Random();
     let RR = new Random();
@@ -54,56 +58,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+    let gameOn = false;
+
+    let startGameInterval = 4000;
+    let startGameTimeout = setTimeout(null,0);
+    //setTimeout(startGame,startGameInterval);
+
 
 
     const opepenArray = [
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,1,1,1,0,0,1,1,0,0,0,0,0,
-      0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
-      0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
-      0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,
-      0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
-      0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
-      0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
-      0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
-      0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
-    ];
-
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,1,1,1,0,0,1,1,0,0,0,0,0,
+          0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+          0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+          0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,
+          0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+          0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+          0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+          0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+          0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
+          0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+        ];
     const invert = R.random_int(0,1);
+    resetBoard();
 
-    /*for (let i=0;i<totalBubbles;i++) {
-      newDepressedButton();
-    }*/
-    
-    opepenArray.forEach((item) => {
-      
-      if (invert) { item = !item; }
 
-      if (item > 0) {
-        newPressedButton();
-      } else {
-        newDepressedButton();
-      }
 
-    });
+
+    // events
 
     let isMousePressed = false;
     mainElement.addEventListener('mousedown', () => {
         isMousePressed = true;
+        mainElement.classList.add("active");
     });
 
     mainElement.addEventListener('mouseup', () => {
         isMousePressed = false;
+        mainElement.classList.remove("active");
     });
 
-    let randomlyToggleInterval = 4000;
-    //setTimeout(randomlyToggle,randomlyToggleInterval);
+    startGameElement.addEventListener('change', toggleStartGame);
+
+    invertElement.addEventListener('click', invertBoard);
+    clearElement.addEventListener('click', clearBoard);
+    resetElement.addEventListener('click', resetBoard);
+
 
 
     let getConfig = getConfiguration();
@@ -149,6 +154,119 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
+
+
+
+
+
+
+
+    function newDepressedButton() {
+        const newDiv = document.createElement('div');
+        //newDiv.style.width = "3%";
+        newDiv.classList.add("popper");
+        newDiv.classList.add("depressed");
+        if (capped) { newDiv.classList.add("capped"); }
+
+        //newDiv.addEventListener("mousedown",toggleButton);
+        ['mousedown', 'touchstart', 'mouseenter'].forEach(eventType => {
+            newDiv.addEventListener(eventType, toggleButton);
+        });
+
+        newDiv.appendChild(document.createElement('div'));
+        mainElement.appendChild(newDiv);
+    }
+
+    function replaceWithDepressedButton(elem) {
+        elem.classList.remove("pressed");
+        elem.classList.add("depressed");
+    }
+
+    function newPressedButton() {
+        const newDiv = document.createElement('div');
+        //newDiv.style.width = "3%";
+        newDiv.classList.add("popper");
+        newDiv.classList.add("pressed");
+        if (capped) { newDiv.classList.add("capped"); }
+
+        //newDiv.addEventListener("mousedown",toggleButton);
+        ['mousedown', 'touchstart', 'mouseenter'].forEach(eventType => {
+            newDiv.addEventListener(eventType, toggleButton);
+        });
+
+        newDiv.appendChild(document.createElement('div'));
+        mainElement.appendChild(newDiv);
+    }
+
+    function replaceWithPressedButton(elem) {
+        
+        elem.classList.remove("depressed");
+        elem.classList.add("pressed");
+
+    }
+
+    function toggleButton(e) {
+        if (e.type == "mouseenter" && !isMousePressed) {
+            return;
+        }
+
+        //const svgTarget = e.target.closest("svg").closest("div");
+        const svgTarget = e.target.closest(".popper");
+        if (svgTarget.classList.contains("depressed")) {
+            replaceWithPressedButton(svgTarget);
+        } else {
+            replaceWithDepressedButton(svgTarget);
+        }
+
+        if (gameOn) {
+            getConfig = getConfiguration();
+            checkConfig = checkConfiguration(getConfig);
+            if (checkConfig) {
+              mainElement.classList.add("correct");
+            } else {
+              mainElement.classList.remove("correct");
+            }
+        }
+
+    }
+
+    function startGame() {
+
+        gameOn = true;
+
+        let randomNum = RR.random_int(0,255);
+        let randomPopper = mainElement.querySelectorAll(".popper");
+        let pressEvent = new Event('mousedown');
+        randomPopper[randomNum].dispatchEvent(pressEvent);
+
+        startGameInterval -= startGameInterval <= 1000 ? 0 : 100;
+        startGameTimeout = setTimeout(startGame,startGameInterval);
+    }
+
+    function endGame() {
+        gameOn = false;
+        mainElement.classList.remove("correct");
+        clearTimeout(startGameTimeout);
+    }
+
+    function toggleStartGame(e) {
+        if (startGameElement.checked > 0) {
+            resetBoard();
+            RR = new Random();
+            startGame();
+        } else {
+            endGame();
+        }
+    }
+
+
+
+
+
+
+
+
     function getConfiguration() {
       let poppers = mainElement.querySelectorAll(".popper");
       let configArray = [];
@@ -175,208 +293,69 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    function newDepressedButton() {
-        const newDiv = document.createElement('div');
-        //newDiv.style.width = "3%";
-        newDiv.classList.add("popper");
-        newDiv.classList.add("depressed");
-        if (capped) { newDiv.classList.add("capped"); }
 
-        //newDiv.addEventListener("mousedown",toggleButton);
-        ['mousedown', 'touchstart', 'mouseenter'].forEach(eventType => {
-            newDiv.addEventListener(eventType, toggleButton);
+
+
+
+
+    function invertBoard() {
+
+        let currentConfig = getConfiguration();
+        let newConfig = [];
+
+        currentConfig.forEach((item,index) => {
+            newConfig.push(!item);
         });
 
-        /*const svgCode = `
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 251 251">
-          <circle cx="125.5" cy="125.5" r="125.5" fill="url(#a)"/>
-          <mask id="c" width="237" height="237" x="7" y="7" maskUnits="userSpaceOnUse" style="mask-type:alpha">
-            <circle cx="125.5" cy="125.5" r="118" fill="url(#b)"/>
-          </mask>
-          <g mask="url(#c)">
-            <circle cx="125.5" cy="125.5" r="118" fill="url(#d)"/>
-          </g>
-          <defs>
-            <linearGradient id="a" x1="5.871" x2="259.059" y1="0" y2="236.06" gradientUnits="userSpaceOnUse" class="gradient-a">
-              <stop offset=".179"/>
-              <stop offset=".437"/>
-              <stop offset=".755"/>
-              <stop offset=".919"/>
-            </linearGradient>
-            <linearGradient id="d" x1="13.02" x2="251.077" y1="7.5" y2="229.453" gradientUnits="userSpaceOnUse" class="gradient-d">
-              <stop offset=".179"/>
-              <stop offset=".437"/>
-              <stop offset=".755"/>
-              <stop offset=".919"/>
-            </linearGradient>
-            <radialGradient id="b" cx="0" cy="0" r="1" gradientTransform="matrix(79.02228 80.6245 -85.43012 83.73241 125.5 125.5)" gradientUnits="userSpaceOnUse" class="gradient-b">
-              <stop offset=".235"/>
-              <stop offset=".855"/>
-              <stop offset="1"/>
-            </radialGradient>
-          </defs>
-        </svg>`;
+        mainElement.innerHTML = "";
 
-        newDiv.innerHTML = svgCode;*/
+        newConfig.forEach((item) => {
+      
+          if (item > 0) {
+            newPressedButton();
+          } else {
+            newDepressedButton();
+          }
 
-        newDiv.appendChild(document.createElement('div'));
-        mainElement.appendChild(newDiv);
+        });
     }
 
-    function replaceWithDepressedButton(elem) {
-        elem.classList.remove("pressed");
-        elem.classList.add("depressed");
 
-        /*const svgCode = `
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 251 251">
-          <circle cx="125.5" cy="125.5" r="125.5" fill="url(#a)"/>
-          <mask id="c" width="237" height="237" x="7" y="7" maskUnits="userSpaceOnUse" style="mask-type:alpha">
-            <circle cx="125.5" cy="125.5" r="118" fill="url(#b)"/>
-          </mask>
-          <g mask="url(#c)">
-            <circle cx="125.5" cy="125.5" r="118" fill="url(#d)"/>
-          </g>
-          <defs>
-            <linearGradient id="a" x1="5.871" x2="259.059" y1="0" y2="236.06" gradientUnits="userSpaceOnUse" class="gradient-a">
-              <stop offset=".179"/>
-              <stop offset=".437"/>
-              <stop offset=".755"/>
-              <stop offset=".919"/>
-            </linearGradient>
-            <linearGradient id="d" x1="13.02" x2="251.077" y1="7.5" y2="229.453" gradientUnits="userSpaceOnUse" class="gradient-d">
-              <stop offset=".179"/>
-              <stop offset=".437"/>
-              <stop offset=".755"/>
-              <stop offset=".919"/>
-            </linearGradient>
-            <radialGradient id="b" cx="0" cy="0" r="1" gradientTransform="matrix(79.02228 80.6245 -85.43012 83.73241 125.5 125.5)" gradientUnits="userSpaceOnUse" class="gradient-b">
-              <stop offset=".235"/>
-              <stop offset=".855"/>
-              <stop offset="1"/>
-            </radialGradient>
-          </defs>
-        </svg>`;
+    function clearBoard() {
 
-        elem.innerHTML = svgCode;*/
-    }
+        let newConfig = Array.from({ length: 256 }, () => invert?1:0);
 
-    function newPressedButton() {
-        const newDiv = document.createElement('div');
-        //newDiv.style.width = "3%";
-        newDiv.classList.add("popper");
-        newDiv.classList.add("pressed");
-        if (capped) { newDiv.classList.add("capped"); }
+        mainElement.innerHTML = "";
 
-        //newDiv.addEventListener("mousedown",toggleButton);
-        ['mousedown', 'touchstart', 'mouseenter'].forEach(eventType => {
-            newDiv.addEventListener(eventType, toggleButton);
+        newConfig.forEach((item) => {
+      
+          if (item > 0) {
+            newPressedButton();
+          } else {
+            newDepressedButton();
+          }
+
         });
 
-        /*const svgCode = `
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 251 251">
-          <circle cx="125.5" cy="125.5" r="125.5" fill="url(#aa)"/>
-          <mask id="c" width="237" height="237" x="7" y="7" maskUnits="userSpaceOnUse" style="mask-type:alpha">
-            <circle cx="125.5" cy="125.5" r="118" fill="url(#bb)"/>
-          </mask>
-          <g mask="url(#c)">
-            <circle cx="125.5" cy="125.5" r="118" fill="url(#dd)"/>
-          </g>
-          <defs>
-            <linearGradient id="aa" x1="5.871" x2="259.059" y1="0" y2="236.06" gradientUnits="userSpaceOnUse" class="gradient-a">
-              <stop offset=".081"/>
-              <stop offset=".245"/>
-              <stop offset=".563"/>
-              <stop offset=".821"/>
-            </linearGradient>
-            <linearGradient id="dd" x1="13.02" x2="251.077" y1="7.5" y2="229.453" gradientUnits="userSpaceOnUse" class="gradient-d">
-              <stop offset=".081"/>
-              <stop offset=".245"/>
-              <stop offset=".563"/>
-              <stop offset=".821"/>
-            </linearGradient>
-            <radialGradient id="bb" cx="0" cy="0" r="1" gradientTransform="matrix(79.02228 80.6245 -85.43012 83.73241 125.5 125.5)" gradientUnits="userSpaceOnUse" class="gradient-b">
-              <stop offset=".855"/>
-              <stop offset="1"/>
-            </radialGradient>
-          </defs>
-        </svg>`;
-
-        newDiv.innerHTML = svgCode;*/
-        newDiv.appendChild(document.createElement('div'));
-        mainElement.appendChild(newDiv);
     }
 
-    function replaceWithPressedButton(elem) {
+
+    function resetBoard() {
         
-        elem.classList.remove("depressed");
-        elem.classList.add("pressed");
+        mainElement.innerHTML = "";
 
-        /*const svgCode = `
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 251 251">
-          <circle cx="125.5" cy="125.5" r="125.5" fill="url(#aa)"/>
-          <mask id="c" width="237" height="237" x="7" y="7" maskUnits="userSpaceOnUse" style="mask-type:alpha">
-            <circle cx="125.5" cy="125.5" r="118" fill="url(#bb)"/>
-          </mask>
-          <g mask="url(#c)">
-            <circle cx="125.5" cy="125.5" r="118" fill="url(#dd)"/>
-          </g>
-          <defs>
-            <linearGradient id="aa" x1="5.871" x2="259.059" y1="0" y2="236.06" gradientUnits="userSpaceOnUse" class="gradient-a">
-              <stop offset=".081"/>
-              <stop offset=".245"/>
-              <stop offset=".563"/>
-              <stop offset=".821"/>
-            </linearGradient>
-            <linearGradient id="dd" x1="13.02" x2="251.077" y1="7.5" y2="229.453" gradientUnits="userSpaceOnUse" class="gradient-d">
-              <stop offset=".081"/>
-              <stop offset=".245"/>
-              <stop offset=".563"/>
-              <stop offset=".821"/>
-            </linearGradient>
-            <radialGradient id="bb" cx="0" cy="0" r="1" gradientTransform="matrix(79.02228 80.6245 -85.43012 83.73241 125.5 125.5)" gradientUnits="userSpaceOnUse" class="gradient-b">
-              <stop offset=".855"/>
-              <stop offset="1"/>
-            </radialGradient>
-          </defs>
-        </svg>`;
+        opepenArray.forEach((item) => {
+          
+          if (invert) { item = !item; }
 
-        elem.innerHTML = svgCode;*/
-    }
+          if (item > 0) {
+            newPressedButton();
+          } else {
+            newDepressedButton();
+          }
 
-    function toggleButton(e) {
-        if (e.type == "mouseenter" && !isMousePressed) {
-            return;
-        }
+        });
 
-        //const svgTarget = e.target.closest("svg").closest("div");
-        const svgTarget = e.target.closest(".popper");
-        if (svgTarget.classList.contains("depressed")) {
-            replaceWithPressedButton(svgTarget);
-        } else {
-            replaceWithDepressedButton(svgTarget);
-        }
-
-        getConfig = getConfiguration();
-        checkConfig = checkConfiguration(getConfig);
-        //console.log('opepen',checkConfig);
-        if (checkConfig) {
-          //document.documentElement.style.setProperty('--color-modifier-h', baseColorModifier_s);
-        } else {
-          //document.documentElement.style.setProperty('--color-modifier-h', baseColorModifier_h);
-        }
-
-    }
-
-
-    function randomlyToggle() {
-      let randomNum = R.random_int(0,255);
-      let randomPopper = mainElement.querySelectorAll(".popper");
-      let pressEvent = new Event('mousedown');
-      randomPopper[randomNum].dispatchEvent(pressEvent);
-      //console.log('ran');
-
-      randomlyToggleInterval -= randomlyToggleInterval <= 1000 ? 0 : 100;
-      setTimeout(randomlyToggle,randomlyToggleInterval);
     }
 
 

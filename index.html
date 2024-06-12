@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paths by Truedrew</title>
+    <title>Opopen by Truedrew</title>
     <script src="hl-gen.js"></script>
     <script src="hl-studio.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -34,9 +34,21 @@
     <main></main>
     <div>
         <div><img src="TruedrewSigGold.svg" style="max-width:100px;" alt="Truedrew Signature" /></div>
-        <div>Invert</div>
-        <div>Clear</div>
-        <div>Reset</div>
+        <div style="display:;">
+            <label>Interactive mode</label>
+            <div>
+                <p>Keep the Opepen in tact as long as possible.</p>
+                <input id="startgame" type="checkbox" />
+            </div>
+
+            <br><br>
+            <label>Controls</label>
+            <div>
+                <p id="invert">Invert</p>
+                <p id="clear">Clear</p>
+                <p id="reset">Reset</p>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 
