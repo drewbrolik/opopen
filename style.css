@@ -51,8 +51,8 @@ html, body {
 html{ height:100%; }
 body {
     background-color:var(--stop-color-1); /*rgba(0,0,0,1);*/
+    background-image: linear-gradient(135deg, var(--stop-color-1) 0%, var(--stop-color-3) 100%);
     /*background-image: repeating-linear-gradient(-35deg, rgba(13,13,13,1), rgba(100,100,100,1));*/
-    font-family: 'Micro 5',Arial,sans-serif;
     font-size:var(--font-size);
     color:white;
     min-height: 100%;
@@ -60,9 +60,6 @@ body {
     place-items: center;*/
     padding:0;
     margin:0;
-
-    background-image: url('noise1.svg');
-    background-size: 50%;
 
     display: grid;
     grid-template-columns: auto auto;
@@ -92,14 +89,36 @@ main {
 
 }
 
+.popper.capped {
+
+}
+.popper.capped::after {
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 30%;
+  background-color:var(--stop-color-2);
+  content:" ";
+  border-radius: 50%;
+}
+.popper.capped.depressed::after {
+  background-color: var(--stop-color-2);
+}
+
 .popper.black {
-  filter:brightness(.8);
-  -webkit-filter:brightness(.8);
+  /*box-shadow: inset 0 0 20px 0px black;*/
+}
+.popper.capped.black::after {
+  background-color:black;
 }
 
 .popper.white {
-  filter:brightness(1.2);
-  -webkit-filter:brightness(1.2);
+  /*box-shadow: inset 0 0 10px rgba(255,255,255,.5);*/
+}
+.popper.capped.white::after {
+  background-color:white;
 }
 
 .popper.pressed {

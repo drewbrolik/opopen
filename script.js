@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log('sat',baseColor_1_s,baseColor_2_s,baseColor_3_s,baseColor_4_s);
 
 
+    let capped = R.random_int(0,1);
+
 
     let totalBubbles = 1024;
     totalBubbles = 256;
@@ -178,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //newDiv.style.width = "3%";
         newDiv.classList.add("popper");
         newDiv.classList.add("depressed");
+        if (capped) { newDiv.classList.add("capped"); }
 
         //newDiv.addEventListener("mousedown",toggleButton);
         ['mousedown', 'touchstart', 'mouseenter'].forEach(eventType => {
@@ -262,6 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //newDiv.style.width = "3%";
         newDiv.classList.add("popper");
         newDiv.classList.add("pressed");
+        if (capped) { newDiv.classList.add("capped"); }
 
         //newDiv.addEventListener("mousedown",toggleButton);
         ['mousedown', 'touchstart', 'mouseenter'].forEach(eventType => {
