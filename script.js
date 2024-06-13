@@ -216,22 +216,15 @@ document.addEventListener("DOMContentLoaded", function () {
             replaceWithDepressedButton(svgTarget);
         }
 
-        if (gameOn) {
-            getConfig = getConfiguration();
-            checkConfig = checkConfiguration(getConfig);
-            if (checkConfig) {
-              mainElement.classList.add("correct");
-              gameStatus.textContent = "That's an Opepen!";
-              loopScoreTime();
-              scoreInterval = setInterval(loopScoreTime,100);
-            } else {
-              mainElement.classList.remove("correct");
-              gameStatus.textContent = "Keep the Opepen in tact...";
-              pauseScoreTime();
-            }
-        }
+        getAndCheck();
 
     }
+
+
+
+
+
+
 
     function startGame() {
 
@@ -262,7 +255,9 @@ document.addEventListener("DOMContentLoaded", function () {
             startGameInterval = 2500;
             timeScore = 0;
             timeElement.textContent = timeScore.toFixed(1);
-            startGame();
+            gameOn = true;
+            startGameTimeout = setTimeout(startGame,3000);
+            //getAndCheck();
         } else {
             endGame();
             pauseScoreTime();
@@ -270,14 +265,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    let timeScoreScale = 1;
     function loopScoreTime() {
       //let newTime = timeElement.textContent*1;
       timeScore += .1;
+      timeScoreScale += .01;
       timeElement.textContent = timeScore.toFixed(1);
+      timeElement.style.transform = "scale("+timeScoreScale+")";
     }
 
     function pauseScoreTime() {
       clearInterval(scoreInterval);
+      timeScoreScale = 1;
+      timeElement.style.transform = "scale(1)";
     }
 
 
@@ -310,6 +310,22 @@ document.addEventListener("DOMContentLoaded", function () {
       return returnVal;
     }
 
+    function getAndCheck() {
+        if (gameOn) {
+            getConfig = getConfiguration();
+            checkConfig = checkConfiguration(getConfig);
+            if (checkConfig) {
+              mainElement.classList.add("correct");
+              gameStatus.textContent = "That's an Opepen!";
+              loopScoreTime();
+              scoreInterval = setInterval(loopScoreTime,100);
+            } else {
+              mainElement.classList.remove("correct");
+              gameStatus.textContent = "Keep the Opepen in tact...";
+              pauseScoreTime();
+            }
+        }
+    }
 
 
 

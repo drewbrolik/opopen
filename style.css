@@ -26,12 +26,14 @@
   --bg-color:var(--stop-color-2); /*hsla(var(--bg-color-h),56%,10%,1);*/
 
   --popper-size:3.125%; /* 32 x 32 */
-  --popper-size:6.25%; /* 16 x 16 */
+  --popper-size:calc(6.25% - 1.88px); /* 16 x 16 */
 
   --size-w:90dvh;
   --size-mw:90vw;
   --size-h:90dvh;
   --size-mh:90vw;
+
+  --font-size:12px;
 }
 
 @font-face {
@@ -65,11 +67,11 @@ body {
     gap:1em;
 
     font-family: 'Red Hat Mono', monospace;
-    font-weight: 400;
+    font-weight: 300;
 }
 
 label {
-  font-weight: 200;
+  font-weight: 100;
   font-size: .8em;
   margin-top: 3.6em;
   margin-bottom: -.5em;
@@ -80,7 +82,7 @@ main {
   background-color:var(--bg-color);
   display: flex;
   flex-wrap: wrap;
-  gap:0px;
+  gap:2px;
   line-height:0;
   position: relative;
   max-width: 900px;
@@ -102,17 +104,24 @@ main.active {
 main.correct {
   /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;*/
   animation:correctPulse 1s infinite;
+  /*border:10px solid var(--stop-color-1);*/
 }
 
 @keyframes correctPulse {
   0% {
-    box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;
+    /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;*/
+    filter:brightness(1.0);
+    -webkit-filter:brightness(1.0);
   }
   50% {
-    box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 4vw white;
+    /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 4vw white;*/
+    filter:brightness(1.2);
+    -webkit-filter:brightness(1.2);
   }
   100% {
-    box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;
+    /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;*/
+    filter:brightness(1.0);
+    -webkit-filter:brightness(1.0);
   }
 }
 
@@ -204,34 +213,86 @@ main.correct {
 
 
 
-/*input#startgame[type=checkbox] {
+input#startgame[type=checkbox] {
     appearance: none;
-    background-color: rgba(40,40,40,1);
-    background-image: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.5));
+    background-color: var(--stop-color-4); /*rgba(40,40,40,1);*/
+    /*background-image: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.5));*/
     position:relative;
     width:2.5em;
     height:1em;
-    margin-left:auto;
-    margin-right:auto;
-    cursor:pointer;
+    /*margin-left:auto;
+    margin-right:auto;*/
+    /*filter:saturate(0%));
+    -webkit-filter:saturate(0%);*/
 }
 input#startgame[type=checkbox]::after {
     content:" ";
-    background-color: white;
-    background-image: repeating-linear-gradient(90deg, rgba(100,100,100,1) 49.9%, rgba(0,0,0,1) 50%);
-    background-size: 20%;
-    background-repeat: repeat-x;
+    background-color: var(--stop-color-2); /*rgba(30,30,30,1);*/
+    background-image: linear-gradient(135deg, rgba(255,255,255,.2) 0%, rgba(255,255,255,.1) 100%);
+    /*background-size: 20%;
+    background-repeat: repeat-x;*/
     position:absolute;
-    width:40%;
+    width:90%;
     height:100%;
-    left:50%;
+    left:5%;
     top:0%;
-    transform:translateY(-4px);
-    border-bottom:4px solid rgba(20,20,20,1);
+    transform:translateY(-5px);
+    border-bottom:4px solid var(--stop-color-3); /*rgba(20,20,20,1);*/
+    transition:all 0s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    /*filter:saturate(0%);
+    -webkit-filter:saturate(0%);*/
+    opacity:1;
 }
 input#startgame[type=checkbox]:checked {
-    
+    background-color: var(--stop-color-3);
+    /*background-image: none;*/
+    box-shadow: 0 0 10px var(--stop-color-1);
+    animation: startGamePulse .5s infinite;
+    filter:none;
+    -webkit-filter:none;
 }
 input#startgame[type=checkbox]:checked::after {
-    left:10%;
-}*/
+    transform:translateY(-3px);
+    border-bottom-width:2px;
+    background-color: var(--stop-color-1);
+    border-bottom-color: var(--stop-color-2);
+    filter:none;
+    -webkit-filter:none;
+}
+input#startgame[type=checkbox] {
+  cursor:grab;
+}
+input#startgame[type=checkbox]:active,input#startgame[type=checkbox]:active::after {
+  cursor: grabbing;
+}
+
+@keyframes startGamePulse {
+  0% {
+    box-shadow: 0 0 10px var(--stop-color-2);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--stop-color-1);
+  }
+  100% {
+    box-shadow: 0 0 10px var(--stop-color-2);
+  }
+}
+
+
+
+#time {
+  display: block;
+}
+
+#invert, #clear, #reset {
+  cursor: grab;
+}
+#invert:active, #clear:active, #reset:active {
+  cursor: grabbing;
+}
+
+.icon {
+  max-width:1em;
+  vertical-align: middle;
+  margin-right: 1em;
+}

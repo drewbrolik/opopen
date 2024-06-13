@@ -33,20 +33,23 @@
 
     <main></main>
     <div style="margin-right: auto;">
-        <div><img src="TruedrewSigGold.svg" style="max-width:100px;" alt="Truedrew Signature" /></div>
+        <div><img src="TruedrewSigGold.svg" style="max-width:100px; transform:translateX(-20%);" alt="Truedrew Signature" /></div>
         <div style="display:;">
             <label>Game mode</label>
             <div>
                 <p id="gameStatus">Keep the Opepen in tact...</p>
-                <input id="startgame" type="checkbox" />
-                <p><span id="time">0.0</span> seconds</p>
+                <div style="display:flex; gap:1em; flex-wrap: wrap; align-items: center; justify-content: flex-start;">
+                    <input id="startgame" type="checkbox" />
+                    <p id="time">0.0</p>
+                    <p>seconds</p>
+                </div>
             </div>
 
             <label>Free mode</label>
             <div>
-                <p id="invert">Invert</p>
-                <p id="clear">Clear</p>
-                <p id="reset">Reset</p>
+                <p id="invert"><img src="./invert.svg" class="icon" alt="Invert Icon" />Invert</p>
+                <p id="clear"><img src="./clear.svg" class="icon" alt="Clear Icon" />Clear</p>
+                <p id="reset"><img src="./reset.svg" class="icon" alt="Reset Icon" />Reset</p>
             </div>
         </div>
     </div>
