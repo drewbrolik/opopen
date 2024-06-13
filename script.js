@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let timeScore = 0;
 
-    let startGameInterval = 4000;
+    let startGameInterval = 2500;
     let startGameTimeout = setTimeout(null,0);
     //setTimeout(startGame,startGameInterval);
 
@@ -242,7 +242,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let pressEvent = new Event('mousedown');
         randomPopper[randomNum].dispatchEvent(pressEvent);
 
-        startGameInterval -= startGameInterval <= 1000 ? 0 : 100;
+        randomPopper[randomNum].classList.add("highlighted");
+        setTimeout(function() { randomPopper[randomNum].classList.remove("highlighted"); },500);
+
+        startGameInterval -= startGameInterval <= 1000 ? 0 : 50;
         startGameTimeout = setTimeout(startGame,startGameInterval);
     }
 
@@ -256,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (startGameElement.checked > 0) {
             resetBoard();
             RR = new Random();
-            startGameInterval = 4000;
+            startGameInterval = 2500;
             timeScore = 0;
             timeElement.textContent = timeScore.toFixed(1);
             startGame();

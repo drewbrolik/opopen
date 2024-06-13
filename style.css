@@ -116,6 +116,11 @@ main.correct {
   }
 }
 
+
+.popper {
+  transition:filter 1s,-webkit-filter 1s;
+}
+
 .popper.capped {
 
 }
@@ -146,6 +151,12 @@ main.correct {
 }
 .popper.capped.white::after {
   background-color:white;
+}
+
+.popper.highlighted {
+  /*box-shadow: inset 0 0 10px rgba(255,255,255,.5);*/
+  filter:brightness(1.6);
+  -webkit-filter:brightness(1.6);
 }
 
 .popper.pressed {
