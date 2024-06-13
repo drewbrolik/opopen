@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const clearElement = document.querySelector("#clear");
     const resetElement = document.querySelector("#reset");
     const startGameElement = document.querySelector("#startgame");
+    const timeElement = document.querySelector("#time");
+    const gameStatus = document.querySelector("#gameStatus");
 
     let R = new Random();
     let RR = new Random();
@@ -60,9 +62,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let gameOn = false;
 
+    let timeScore = 0;
+
     let startGameInterval = 4000;
     let startGameTimeout = setTimeout(null,0);
     //setTimeout(startGame,startGameInterval);
+
+    let scoreInterval = setTimeout(null,0);
 
 
 
@@ -130,22 +136,13 @@ document.addEventListener("DOMContentLoaded", function () {
         document.documentElement.style.setProperty('--size-h', height*.9+"px");
         document.documentElement.style.setProperty('--size-mh', width*.9+"px");
 
-        /*
-        // font size
-        if (width < 767 || height < 767) {
-            document.documentElement.style.setProperty('--font-size', "12px");
+        if (width > height+(width*.3)) {
+          document.body.style.gridTemplateColumns = "auto 30%";
+          document.body.style.gridTemplateRows = "1fr";
         } else {
-            document.documentElement.style.setProperty('--font-size', "16px");
+          document.body.style.gridTemplateColumns = "1fr";
+          document.body.style.gridTemplateRows = "auto auto";
         }
-
-        // frame width
-        document.documentElement.style.setProperty('--frame-width', (width>height ? height*.02 : width*.02) + "px");
-
-        // smallest line size
-        var smallestLine = (width>height ? height*.00075 : width*.00075);
-        //if (smallestLine < .75) { smallestLine = .75; }
-        document.documentElement.style.setProperty('--smallest-line', smallestLine + "px");
-        */
 
     }
     resizeGame();
@@ -224,8 +221,13 @@ document.addEventListener("DOMContentLoaded", function () {
             checkConfig = checkConfiguration(getConfig);
             if (checkConfig) {
               mainElement.classList.add("correct");
+              gameStatus.textContent = "That's an Opepen!";
+              loopScoreTime();
+              scoreInterval = setInterval(loopScoreTime,100);
             } else {
               mainElement.classList.remove("correct");
+              gameStatus.textContent = "Keep the Opepen in tact...";
+              pauseScoreTime();
             }
         }
 
@@ -254,12 +256,26 @@ document.addEventListener("DOMContentLoaded", function () {
         if (startGameElement.checked > 0) {
             resetBoard();
             RR = new Random();
+            startGameInterval = 4000;
+            timeScore = 0;
+            timeElement.textContent = timeScore.toFixed(1);
             startGame();
         } else {
             endGame();
+            pauseScoreTime();
         }
     }
 
+
+    function loopScoreTime() {
+      //let newTime = timeElement.textContent*1;
+      timeScore += .1;
+      timeElement.textContent = timeScore.toFixed(1);
+    }
+
+    function pauseScoreTime() {
+      clearInterval(scoreInterval);
+    }
 
 
 
@@ -290,6 +306,10 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       return returnVal;
     }
+
+
+
+
 
 
 
