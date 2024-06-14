@@ -160,6 +160,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+    function speckle() {
+        for (let i=0;i<1024;i++) {
+            let x = R.random_int(0,100);
+            let y = R.random_int(0,100);
+            const newDiv = document.createElement('div');
+            newDiv.style.position = "absolute";
+            newDiv.style.left = x+"%";
+            newDiv.style.top = y+"%";
+            newDiv.style.width = "3px";
+            newDiv.style.height = "3px";
+            newDiv.style.transform = "translate(-50%,-50%)";
+            newDiv.style.backgroundColor = "red";
+            mainElement.appendChild(newDiv);
+        }
+    }
+    //speckle();
+
+
+
 
 
 
@@ -172,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (capped) { newDiv.classList.add("capped"); }
 
         //newDiv.addEventListener("mousedown",toggleButton);
-        ['mousedown', 'touchstart', 'mouseenter'].forEach(eventType => {
+        ['mousedown', 'mouseenter'].forEach(eventType => { //'touchstart', 
             newDiv.addEventListener(eventType, toggleButton);
         });
 
@@ -193,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (capped) { newDiv.classList.add("capped"); }
 
         //newDiv.addEventListener("mousedown",toggleButton);
-        ['mousedown', 'touchstart', 'mouseenter'].forEach(eventType => {
+        ['mousedown', 'mouseenter'].forEach(eventType => { //'touchstart', 
             newDiv.addEventListener(eventType, toggleButton);
         });
 

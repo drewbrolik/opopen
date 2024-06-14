@@ -43,11 +43,6 @@
     src: url('RedHatMono-VariableFont_wght.ttf') format('truetype');
 }
 
-html, body {
-  overscroll-behavior: none;
-  touch-action: none;
-}
-
 html{ height:100%; }
 body {
     background-color:var(--stop-color-1); /*rgba(0,0,0,1);*/
