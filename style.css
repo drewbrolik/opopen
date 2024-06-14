@@ -34,6 +34,8 @@
   --size-mh:90vw;
 
   --font-size:12px;
+
+  --countdown-content: "3";
 }
 
 @font-face {
@@ -63,11 +65,17 @@ body {
 
     display: grid;
     grid-template-columns: auto 30%;
+    grid-template-rows: 1fr;
     place-items: center;
     gap:1em;
 
     font-family: 'Red Hat Mono', monospace;
     font-weight: 300;
+}
+body.stacked {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    margin-top:10%;
 }
 
 label {
@@ -85,7 +93,7 @@ main {
   gap:2px;
   line-height:0;
   position: relative;
-  max-width: 900px;
+  /*max-width: 900px;*/
   margin: auto;
   padding:1vw;
   box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35);
@@ -106,6 +114,31 @@ main.correct {
   animation:correctPulse 1s infinite;
   /*border:10px solid var(--stop-color-1);*/
 }
+main.countdown::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:1em;
+  height:1em;
+  line-height: 1em;
+  font-size:3em;
+  text-align: center;
+  background-color: black;
+  color: white;
+  content:var(--countdown-content);
+  border-radius: 50%;
+  padding:6%;
+}
+main.countdown.three::after {
+  content:"3";
+}
+main.countdown.two::after {
+  content:"2";
+}
+main.countdown.one::after {
+  content:"1";
+}
 
 @keyframes correctPulse {
   0% {
@@ -124,6 +157,21 @@ main.correct {
     -webkit-filter:brightness(1.0);
   }
 }
+
+
+
+
+#menu {
+  margin-right: auto;
+}
+#menu.stacked {
+  margin-left:10%;
+  margin-right:10%;
+}
+
+
+
+
 
 
 .popper {
@@ -224,6 +272,8 @@ input#startgame[type=checkbox] {
     margin-right:auto;*/
     /*filter:saturate(0%));
     -webkit-filter:saturate(0%);*/
+    margin:0;
+    padding:0;
 }
 input#startgame[type=checkbox]::after {
     content:" ";

@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const startGameElement = document.querySelector("#startgame");
     const timeElement = document.querySelector("#time");
     const gameStatus = document.querySelector("#gameStatus");
+    const menuElement = document.querySelector("#menu");
 
     let R = new Random();
     let RR = new Random();
@@ -137,11 +138,15 @@ document.addEventListener("DOMContentLoaded", function () {
         document.documentElement.style.setProperty('--size-mh', width*.9+"px");
 
         if (width > height+(width*.3)) {
-          document.body.style.gridTemplateColumns = "auto 30%";
-          document.body.style.gridTemplateRows = "1fr";
+          //document.body.style.gridTemplateColumns = "auto 30%";
+          //document.body.style.gridTemplateRows = "1fr";
+          document.body.classList.remove("stacked");
+          menuElement.classList.remove("stacked");
         } else {
-          document.body.style.gridTemplateColumns = "1fr";
-          document.body.style.gridTemplateRows = "auto auto";
+          //document.body.style.gridTemplateColumns = "1fr";
+          //document.body.style.gridTemplateRows = "auto auto";
+          document.body.classList.add("stacked");
+          menuElement.classList.add("stacked");
         }
 
     }
@@ -256,14 +261,29 @@ document.addEventListener("DOMContentLoaded", function () {
             timeScore = 0;
             timeElement.textContent = timeScore.toFixed(1);
             gameOn = true;
-            startGameTimeout = setTimeout(startGame,3000);
+            mainElement.classList.add("countdown");
+            setCountdownContent("3");
+            setTimeout(function() { setCountdownContent("2"); },1000);
+            setTimeout(function() { setCountdownContent("1"); },2000);
+            setTimeout(countdownEnd,3000);
+            //startGameTimeout = setTimeout(startGame,3000);
             //getAndCheck();
+            disableFreeMode();
         } else {
             endGame();
             pauseScoreTime();
+            enableFreeMode();
         }
     }
 
+    function setCountdownContent(content) {
+      document.documentElement.style.setProperty('--countdown-content', "\""+content+"\"");
+    }
+
+    function countdownEnd() {
+      mainElement.classList.remove("countdown");
+      startGame();
+    }
 
     let timeScoreScale = 1;
     function loopScoreTime() {
@@ -280,7 +300,17 @@ document.addEventListener("DOMContentLoaded", function () {
       timeElement.style.transform = "scale(1)";
     }
 
+    function disableFreeMode() {
+      invertElement.style.opacity = ".4";
+      clearElement.style.opacity = ".4";
+      resetElement.style.opacity = ".4";
+    }
 
+    function enableFreeMode() {
+      invertElement.style.opacity = "1";
+      clearElement.style.opacity = "1";
+      resetElement.style.opacity = "1";
+    }
 
 
 
@@ -339,6 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function invertBoard() {
 
+      if (!gameOn) {
         let currentConfig = getConfiguration();
         let newConfig = [];
 
@@ -357,10 +388,13 @@ document.addEventListener("DOMContentLoaded", function () {
           }
 
         });
+      }
     }
 
 
     function clearBoard() {
+
+      if (!gameOn) {
 
         let newConfig = Array.from({ length: 256 }, () => invert?1:0);
 
@@ -376,25 +410,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
+      }
+
     }
 
 
     function resetBoard() {
         
-        mainElement.innerHTML = "";
+        if (!gameOn) {
+          mainElement.innerHTML = "";
 
-        opepenArray.forEach((item) => {
-          
-          if (invert) { item = !item; }
+          opepenArray.forEach((item) => {
+            
+            if (invert) { item = !item; }
 
-          if (item > 0) {
-            newPressedButton();
-          } else {
-            newDepressedButton();
-          }
+            if (item > 0) {
+              newPressedButton();
+            } else {
+              newDepressedButton();
+            }
 
-        });
-
+          });
+        }
     }
 
 
