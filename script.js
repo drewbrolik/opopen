@@ -45,9 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let capped = R.random_int(0,1);
 
 
-    let totalBubbles = 1024;
-    totalBubbles = 256;
-
+    let totalBubbles = 256;
 
 
 
@@ -67,10 +65,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let startGameInterval = 2500;
     let startGameTimeout = setTimeout(null,0);
-    //setTimeout(startGame,startGameInterval);
 
     let scoreInterval = setTimeout(null,0);
 
+
+
+    let pocketSize = false;
 
 
     const opepenArray = [
@@ -91,6 +91,15 @@ document.addEventListener("DOMContentLoaded", function () {
           0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
           0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
         ];
+
+    const opepenArrayPocket = [
+        0,0,0,0,0,
+        0,1,1,1,0,
+        0,1,1,1,0,
+        0,0,0,0,0,
+        0,1,1,1,0
+      ];
+
     const invert = R.random_int(0,1);
     resetBoard();
 
@@ -119,7 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     startGameElement.addEventListener('change', toggleStartGame);
-
     invertElement.addEventListener('click', invertBoard);
     clearElement.addEventListener('click', clearBoard);
     resetElement.addEventListener('click', resetBoard);
@@ -127,15 +135,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    let getConfig = getConfiguration();
+    /*let getConfig = getConfiguration();
     let checkConfig = checkConfiguration(getConfig);
-    //console.log('opepen',checkConfig);
     if (checkConfig) {
       document.documentElement.style.setProperty('--color-modifier-h', baseColorModifier_s);
     } else {
       document.documentElement.style.setProperty('--color-modifier-h', baseColorModifier_h);
-    }
-
+    }*/
 
 
     function resizeGame() {
@@ -147,15 +153,27 @@ document.addEventListener("DOMContentLoaded", function () {
         document.documentElement.style.setProperty('--size-mh', width*.9+"px");
 
         if (width > height+(width*.3)) {
-          //document.body.style.gridTemplateColumns = "auto 30%";
-          //document.body.style.gridTemplateRows = "1fr";
           document.body.classList.remove("stacked");
           menuElement.classList.remove("stacked");
-        } else {
-          //document.body.style.gridTemplateColumns = "1fr";
-          //document.body.style.gridTemplateRows = "auto auto";
+          document.body.classList.remove("square");
+          menuElement.classList.remove("square");
+        } else if (height > width+(height*.3)) {
           document.body.classList.add("stacked");
           menuElement.classList.add("stacked");
+          document.body.classList.remove("square");
+          menuElement.classList.remove("square");
+        } else {
+          document.body.classList.remove("stacked");
+          menuElement.classList.remove("stacked");
+          document.body.classList.add("square");
+          menuElement.classList.add("square");
+        }
+
+
+        if (width < 700 && !pocketSize) {
+          resetBoard_pocket();
+        } else if (width > 700 && pocketSize) {
+          resetBoard();
         }
 
     }
@@ -200,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         //newDiv.addEventListener("mousedown",toggleButton);
         if (isTouch()) {
-          ['touchstart','touchmove'].forEach(eventType => { 
+          ['touchstart'].forEach(eventType => { 
               newDiv.addEventListener(eventType, toggleButton);
           });
         } else {
@@ -227,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         //newDiv.addEventListener("mousedown",toggleButton);
         if (isTouch()) {
-          ['touchstart','touchmove'].forEach(eventType => { 
+          ['touchstart'].forEach(eventType => { 
               newDiv.addEventListener(eventType, toggleButton);
           });
         } else {
@@ -274,9 +292,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         gameOn = true;
 
-        let randomNum = RR.random_int(0,255);
+        let randomNum = pocketSize ? RR.random_int(0,24) : RR.random_int(0,255);
+        console.log(randomNum);
         let randomPopper = mainElement.querySelectorAll(".popper");
-        let pressEvent = new Event('mousedown');
+        let pressEvent = new Event(isTouch() ? 'touchstart' : 'mousedown');
         randomPopper[randomNum].dispatchEvent(pressEvent);
 
         randomPopper[randomNum].classList.add("highlighted");
@@ -294,7 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function toggleStartGame(e) {
         if (startGameElement.checked > 0) {
-            resetBoard();
+            pocketSize ? resetBoard_pocket() : resetBoard();
             RR = new Random();
             startGameInterval = 2500;
             timeScore = 0;
@@ -372,9 +391,17 @@ document.addEventListener("DOMContentLoaded", function () {
       let returnVal = true;
       configArray.forEach((item,index) => {
         if (invert) { item = !item; }
-        if (item != opepenArray[index]) {
-          returnVal = false;
+        
+        if (pocketSize) {
+          if (item != opepenArrayPocket[index]) {
+            returnVal = false;
+          }
+        } else {
+          if (item != opepenArray[index]) {
+            returnVal = false;
+          }
         }
+
       });
       return returnVal;
     }
@@ -456,6 +483,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function resetBoard() {
         
+      document.documentElement.style.setProperty('--popper-size', "calc(6.25% - 1.88px)");
+
         if (!gameOn) {
           mainElement.innerHTML = "";
 
@@ -471,6 +500,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
           });
         }
+
+        pocketSize = false;
+
+    }
+
+    function resetBoard_pocket() {
+        
+        document.documentElement.style.setProperty('--popper-size', "calc(20% - 1.88px)");
+
+        if (!gameOn) {
+          mainElement.innerHTML = "";
+
+          opepenArrayPocket.forEach((item) => {
+            
+            if (invert) { item = !item; }
+
+            if (item > 0) {
+              newPressedButton();
+            } else {
+              newDepressedButton();
+            }
+
+          });
+        }
+
+        pocketSize = true;
     }
 
 

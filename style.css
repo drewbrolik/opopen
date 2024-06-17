@@ -67,6 +67,10 @@ body {
     font-family: 'Red Hat Mono', monospace;
     font-weight: 300;
 }
+body.square {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
 body.stacked {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
@@ -162,10 +166,21 @@ main.countdown.one::after {
 
 #menu {
   margin-right: auto;
+  padding-top:10%;
+  padding-bottom:10%;
+  width: 100%;
 }
 #menu.stacked {
   margin-left:10%;
   margin-right:10%;
+}
+#menu.square {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: blue;
+  padding:1em;
+  width: fit-content;
 }
 
 
