@@ -98,16 +98,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // events
+    function isTouch() {
+      return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+    }
+
 
     let isMousePressed = false;
-    mainElement.addEventListener('mousedown', () => {
-        isMousePressed = true;
-        mainElement.classList.add("active");
+    ['mousedown', 'touchstart'].forEach(eventType => { 
+        mainElement.addEventListener(eventType, () => {
+            isMousePressed = true;
+            mainElement.classList.add("active");
+        });
     });
 
-    mainElement.addEventListener('mouseup', () => {
-        isMousePressed = false;
-        mainElement.classList.remove("active");
+    ['mouseup', 'touchend'].forEach(eventType => {
+        mainElement.addEventListener(eventType, () => {
+            isMousePressed = false;
+            mainElement.classList.remove("active");
+        });
     });
 
     startGameElement.addEventListener('change', toggleStartGame);
@@ -115,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     invertElement.addEventListener('click', invertBoard);
     clearElement.addEventListener('click', clearBoard);
     resetElement.addEventListener('click', resetBoard);
+
 
 
 
@@ -182,7 +191,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
     function newDepressedButton() {
         const newDiv = document.createElement('div');
         //newDiv.style.width = "3%";
@@ -191,9 +199,15 @@ document.addEventListener("DOMContentLoaded", function () {
         if (capped) { newDiv.classList.add("capped"); }
 
         //newDiv.addEventListener("mousedown",toggleButton);
-        ['mousedown', 'mouseenter'].forEach(eventType => { //'touchstart', 
-            newDiv.addEventListener(eventType, toggleButton);
-        });
+        if (isTouch()) {
+          ['touchstart','touchmove'].forEach(eventType => { 
+              newDiv.addEventListener(eventType, toggleButton);
+          });
+        } else {
+          ['mousedown', 'mouseenter'].forEach(eventType => { 
+              newDiv.addEventListener(eventType, toggleButton);
+          });
+        }
 
         newDiv.appendChild(document.createElement('div'));
         mainElement.appendChild(newDiv);
@@ -212,9 +226,15 @@ document.addEventListener("DOMContentLoaded", function () {
         if (capped) { newDiv.classList.add("capped"); }
 
         //newDiv.addEventListener("mousedown",toggleButton);
-        ['mousedown', 'mouseenter'].forEach(eventType => { //'touchstart', 
-            newDiv.addEventListener(eventType, toggleButton);
-        });
+        if (isTouch()) {
+          ['touchstart','touchmove'].forEach(eventType => { 
+              newDiv.addEventListener(eventType, toggleButton);
+          });
+        } else {
+          ['mousedown', 'mouseenter'].forEach(eventType => { 
+              newDiv.addEventListener(eventType, toggleButton);
+          });
+        }
 
         newDiv.appendChild(document.createElement('div'));
         mainElement.appendChild(newDiv);
@@ -228,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function toggleButton(e) {
-        if (e.type == "mouseenter" && !isMousePressed) {
+        if ((e.type == "mouseenter" && !isMousePressed) || (e.type == "touchmove" && !isMousePressed)) {
             return;
         }
 

@@ -82,6 +82,10 @@ label {
 }
 
 main {
+  overscroll-behavior: none;
+  touch-action: none;
+}
+main {
   background-color:var(--bg-color);
   display: flex;
   flex-wrap: wrap;
