@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const timeElement = document.querySelector("#time");
     const gameStatus = document.querySelector("#gameStatus");
     const menuElement = document.querySelector("#menu");
+    const saveloadElement = document.querySelector("#saveload");
+    const saveLoadCopy = document.querySelector("#saveload_copy");
+    const menuTriggerElement = document.querySelector("#menutrigger");
 
     let R = new Random();
     let RR = new Random();
@@ -132,7 +135,16 @@ document.addEventListener("DOMContentLoaded", function () {
     clearElement.addEventListener('click', clearBoard);
     resetElement.addEventListener('click', resetBoard);
 
+    // load/save
+    ['keyup', 'paste'].forEach(eventType => {
+        saveloadElement.addEventListener(eventType, (e) => {
+            loadConfiguration(e.target.value)
+        });
+    });
 
+    saveLoadCopy.addEventListener('click', copyTextarea);
+
+    menuTriggerElement.addEventListener('click', toggleQueuedMenu);
 
 
     /*let getConfig = getConfiguration();
@@ -145,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function resizeGame() {
+
         var width = window.innerWidth;
         var height = window.innerHeight;
         document.documentElement.style.setProperty('--size-w', height*.9+"px");
@@ -167,6 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
           menuElement.classList.remove("stacked");
           document.body.classList.add("square");
           menuElement.classList.add("square");
+          menuElement.classList.add("queued");
         }
 
 
@@ -181,6 +195,17 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener('resize', resizeGame);
 
 
+
+
+
+
+    function toggleQueuedMenu() {
+        if (menuElement.classList.contains("queued")) {
+            menuElement.classList.remove("queued");
+        } else {
+            menuElement.classList.add("queued");
+        }
+    }
 
 
 
@@ -384,6 +409,10 @@ document.addEventListener("DOMContentLoaded", function () {
           configArray.push(0); //invert>0?1:0
         }
       });
+
+      saveloadElement.value = configArray.toString(1);
+      saveLoadCopy.textContent = "Copy";
+
       return configArray;
     }
 
@@ -407,8 +436,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getAndCheck() {
+        getConfig = getConfiguration(); // check for copy/paste and this function
         if (gameOn) {
-            getConfig = getConfiguration();
             checkConfig = checkConfiguration(getConfig);
             if (checkConfig) {
               mainElement.classList.add("correct");
@@ -421,6 +450,63 @@ document.addEventListener("DOMContentLoaded", function () {
               pauseScoreTime();
             }
         }
+    }
+
+    function loadConfiguration(stringArray) {
+        
+        if (isValidJSONArray("["+stringArray+"]") && stringArray.replaceAll(" ","") != "") {
+
+            let configArray = JSON.parse("["+stringArray+"]");
+
+            mainElement.innerHTML = "";
+
+            configArray.forEach((item) => {
+
+                if (invert) { item = !item; }
+
+                if (item > 0) {
+                  newPressedButton();
+                } else {
+                  newDepressedButton();
+                }
+
+            });
+        }
+    }
+
+    function isValidJSONArray(str) {
+        try {
+            const parsed = JSON.parse(str);
+            return Array.isArray(parsed);
+        } catch (e) {
+            return false;
+        }
+    }
+
+
+
+
+
+
+
+
+
+    function copyTextarea() {
+        
+        // Select the textarea content
+        saveloadElement.select();
+        saveloadElement.setSelectionRange(0, saveloadElement.value.length); // For mobile devices
+
+        // Copy the selected text to the clipboard
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) { saveLoadCopy.textContent = "Copied!"; }
+        } catch (err) {
+            console.error('Oops, unable to copy', err);
+        }
+
+        // Highlight the entire textarea content
+        saveloadElement.focus();
     }
 
 
