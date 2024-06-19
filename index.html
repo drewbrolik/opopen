@@ -11,17 +11,20 @@
 <body>
 
     <main></main>
-    <div id="menu">
+    <div id="menu" class="square queued">
         <div style="display:flex; gap:2em; align-items:center; flex-wrap: wrap;">
             <h1 style="margin:0;">OPOPEN</h1>
-            <img src="TruedrewSigGold.svg" style="max-width:40px; transform:translateX(-20%);" alt="Truedrew Signature" />
+            <img src="TruedrewSigGold.svg" style="max-width:40px; transform:translateX(-20%);" alt="Truedrew Signature" id="signature" />
         </div>
         <div style="display:;">
             <label>Game mode</label>
             <div>
-                <p id="gameStatus">Keep the Opepen in tact...</p>
                 <div style="display:flex; gap:1em; flex-wrap: wrap; align-items: center; justify-content: flex-start;">
                     <input id="startgame" type="checkbox" />
+                    <p id="startGameStatus">Start Game</p>
+                </div>
+                <p id="gameStatus">Keep the Opepen in tact...</p>
+                <div style="display:flex; gap:1em; flex-wrap: wrap; align-items: center; justify-content: flex-start;">
                     <p id="time">0.0</p>
                     <p>seconds</p>
                 </div>

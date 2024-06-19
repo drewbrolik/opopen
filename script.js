@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const menuTriggerElement = document.querySelector("#menutrigger");
     const model = document.getElementById("model");
     const serial = document.getElementById("serial");
+    const signatureElement = document.getElementById("signature");
+    const startGameStatus = document.querySelector("#startGameStatus");
+
 
     let R = new Random();
     let RR = new Random();
@@ -33,18 +36,18 @@ document.addEventListener("DOMContentLoaded", function () {
     document.documentElement.style.setProperty('--stop-color-3-h', baseColor_3_h);
     document.documentElement.style.setProperty('--stop-color-4-h', baseColor_4_h);
 
-    console.log('hue',baseColor_1_h,baseColor_2_h,baseColor_3_h,baseColor_4_h);
+    //console.log('hue',baseColor_1_h,baseColor_2_h,baseColor_3_h,baseColor_4_h);
 
-    let baseColor_1_s = Math.abs((56 - baseColorModifier_s)%100);
-    let baseColor_2_s = Math.abs((56 - baseColorModifier_s)%100);
-    let baseColor_3_s = Math.abs((70 - baseColorModifier_s)%100);
-    let baseColor_4_s = Math.abs((78 - baseColorModifier_s)%100);
+    let baseColor_1_s = Math.abs((56 + baseColorModifier_s)%100);
+    let baseColor_2_s = Math.abs((56 + baseColorModifier_s)%100);
+    let baseColor_3_s = Math.abs((70 + baseColorModifier_s)%100);
+    let baseColor_4_s = Math.abs((78 + baseColorModifier_s)%100);
     document.documentElement.style.setProperty('--stop-color-1-s', baseColor_1_s+"%");
     document.documentElement.style.setProperty('--stop-color-2-s', baseColor_2_s+"%");
     document.documentElement.style.setProperty('--stop-color-3-s', baseColor_3_s+"%");
     document.documentElement.style.setProperty('--stop-color-4-s', baseColor_4_s+"%");
 
-    console.log('sat',baseColor_1_s,baseColor_2_s,baseColor_3_s,baseColor_4_s);
+    //console.log('sat',baseColor_1_s,baseColor_2_s,baseColor_3_s,baseColor_4_s);
 
 
     let capped = R.random_int(0,1);
@@ -52,16 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let totalBubbles = 256;
 
-
-
-    const traits = [];
-    traits["baseColorModifier"] = baseColorModifier_h;
-    traits["baseColorModifier2"] = baseColorModifier_s;
-
-    console.log(traits);
-
-    model.innerText = hl.tx.contractAddress.substr(0,10);
-    serial.innerText = hl.tx.hash.substr(0,8)+"-"+hl.tx.tokenId;
 
 
 
@@ -112,6 +105,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
+
+    const traits = [];
+    traits["Base Color"] = hslToHex("hsl("+baseColor_2_h+","+baseColor_2_s+"%,22%)");
+    traits["Shadow Color"] = hslToHex("hsl("+baseColor_3_h+","+baseColor_3_s+"%,9%)");
+    traits["Nubs"] = capped ? "Yes" : "No";
+    traits["Base State"] = invert ? "Pressed" : "Depressed";
+    traits["Model No"] = hl.tx.contractAddress;
+    traits["Serial No"] = hl.tx.hash+"-"+hl.tx.tokenId;
+
+    console.log(traits);
+
+    //console.log(traits);
+    hl.token.setTraits(traits);
+
+    // Also set a name and description for this token
+    hl.token.setName(`Opopen #${hl.tx.tokenId}`);
+
+
+
+
+    model.innerText = hl.tx.contractAddress.substr(0,10);
+    serial.innerText = hl.tx.hash.substr(0,8)+"-"+hl.tx.tokenId;
+
+
+
+
+
     // events
     function isTouch() {
       return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
@@ -145,6 +166,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    signatureElement.addEventListener('dblclick',function(event) {
+        window.open('https://truedrew.art', '_blank');
+    })
     saveLoadCopy.addEventListener('click', copyTextarea);
 
     menuTriggerElement.addEventListener('click', toggleQueuedMenu);
@@ -192,9 +216,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         if (width < 700 && !pocketSize) {
-          resetBoard_pocket();
+            pocketSize = true;
+            resetBoard();
         } else if (width > 700 && pocketSize) {
-          resetBoard();
+            pocketSize = false;
+            resetBoard();
         }
 
         getConfiguration();
@@ -208,8 +234,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    function toggleQueuedMenu() {
-        if (menuElement.classList.contains("queued")) {
+    function toggleQueuedMenu(e,forceClose=false) {
+        if (menuElement.classList.contains("queued") && !forceClose) {
             menuElement.classList.remove("queued");
             menuTriggerElement.querySelector("img").src = "./close.svg";
         } else {
@@ -220,25 +246,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-
-
-    function speckle() {
-        for (let i=0;i<1024;i++) {
-            let x = R.random_int(0,100);
-            let y = R.random_int(0,100);
-            const newDiv = document.createElement('div');
-            newDiv.style.position = "absolute";
-            newDiv.style.left = x+"%";
-            newDiv.style.top = y+"%";
-            newDiv.style.width = "3px";
-            newDiv.style.height = "3px";
-            newDiv.style.transform = "translate(-50%,-50%)";
-            newDiv.style.backgroundColor = "red";
-            mainElement.appendChild(newDiv);
-        }
-    }
-    //speckle();
 
 
 
@@ -270,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function replaceWithDepressedButton(elem) {
         elem.classList.remove("pressed");
         elem.classList.add("depressed");
+        elem.classList.remove("correct");
     }
 
     function newPressedButton() {
@@ -298,6 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         elem.classList.remove("depressed");
         elem.classList.add("pressed");
+        elem.classList.remove("correct");
 
     }
 
@@ -329,27 +338,30 @@ document.addEventListener("DOMContentLoaded", function () {
         gameOn = true;
 
         let randomNum = pocketSize ? RR.random_int(0,24) : RR.random_int(0,255);
-        console.log(randomNum);
         let randomPopper = mainElement.querySelectorAll(".popper");
         let pressEvent = new Event(isTouch() ? 'touchstart' : 'mousedown');
         randomPopper[randomNum].dispatchEvent(pressEvent);
 
         randomPopper[randomNum].classList.add("highlighted");
-        setTimeout(function() { randomPopper[randomNum].classList.remove("highlighted"); },500);
+        setTimeout(function() { randomPopper[randomNum].classList.remove("highlighted"); },1000);
 
-        startGameInterval -= startGameInterval <= 1000 ? 0 : 50;
+        startGameInterval -= startGameInterval <= pocketSize ? 500 : 1000 ? 0 : pocketSize ? 100 : 50;
         startGameTimeout = setTimeout(startGame,startGameInterval);
     }
 
     function endGame() {
+        clearTimeout(startGameTimeout);
+        clearTimeout(countdownTimeout);
+        countdownEnd();
         gameOn = false;
         mainElement.classList.remove("correct");
-        clearTimeout(startGameTimeout);
+        startGameStatus.textContent = "Start Game";
     }
 
+    let countdownTimeout = null;
     function toggleStartGame(e) {
         if (startGameElement.checked > 0) {
-            pocketSize ? resetBoard_pocket() : resetBoard();
+            resetBoard();
             RR = new Random();
             startGameInterval = 2500;
             timeScore = 0;
@@ -357,12 +369,24 @@ document.addEventListener("DOMContentLoaded", function () {
             gameOn = true;
             mainElement.classList.add("countdown");
             setCountdownContent("3");
-            setTimeout(function() { setCountdownContent("2"); },1000);
-            setTimeout(function() { setCountdownContent("1"); },2000);
-            setTimeout(countdownEnd,3000);
+            countdownTimeout = setTimeout(function() {
+                setCountdownContent("2");
+                countdownTimeout = setTimeout(function() {
+                    setCountdownContent("1");
+                    countdownTimeout = setTimeout(function() {
+                        countdownEnd();
+                        startGame();
+                    },1000);
+                },1000);
+            },1000);
+            
             //startGameTimeout = setTimeout(startGame,3000);
             //getAndCheck();
             disableFreeMode();
+            toggleQueuedMenu(e,true);
+
+            startGameStatus.textContent = "End Game";
+
         } else {
             endGame();
             pauseScoreTime();
@@ -376,7 +400,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function countdownEnd() {
       mainElement.classList.remove("countdown");
-      startGame();
     }
 
     let timeScoreScale = 1;
@@ -447,16 +470,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getAndCheck() {
-        getConfig = getConfiguration(); // check for copy/paste and this function
+        
+        getConfig = getConfiguration(); // for both copy/paste and this function
+        let opepenPoppers = [];
+
         if (gameOn) {
             checkConfig = checkConfiguration(getConfig);
             if (checkConfig) {
-              mainElement.classList.add("correct");
+              //mainElement.classList.add("correct");
+
+              opepenPoppers = invert ? mainElement.querySelectorAll(".popper.depressed") : mainElement.querySelectorAll(".popper.pressed");
+              opepenPoppers.forEach((item) => {
+                item.classList.add("correct");
+              });
+
               gameStatus.textContent = "That's an Opepen!";
               loopScoreTime();
               scoreInterval = setInterval(loopScoreTime,100);
             } else {
-              mainElement.classList.remove("correct");
+              //mainElement.classList.remove("correct");
+
+              opepenPoppers = invert ? mainElement.querySelectorAll(".popper.depressed") : mainElement.querySelectorAll(".popper.pressed");
+              opepenPoppers.forEach((item) => {
+                item.classList.remove("correct");
+              });
+
               gameStatus.textContent = "Keep the Opepen in tact...";
               pauseScoreTime();
             }
@@ -551,6 +589,8 @@ document.addEventListener("DOMContentLoaded", function () {
           }
 
         });
+
+        getConfiguration();
       }
     }
 
@@ -559,7 +599,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (!gameOn) {
 
-        let newConfig = Array.from({ length: 256 }, () => invert?1:0);
+        let newConfig = pocketSize ? Array.from({ length: 25 }, () => invert?1:0) : Array.from({ length: 256 }, () => invert?1:0);
 
         mainElement.innerHTML = "";
 
@@ -573,16 +613,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
+        getConfiguration();
       }
 
     }
 
 
     function resetBoard() {
-        
-      document.documentElement.style.setProperty('--popper-size', "calc(6.25% - 1.88px)");
+        if (pocketSize) {
+            resetBoard_pocket();
+        } else {
+            resetBoard_full();
+        }
+    }
+
+
+    function resetBoard_full() {
+
+        document.documentElement.style.setProperty('--popper-size', "calc(6.25% - 1.88px)");
 
         if (!gameOn) {
+    
           mainElement.innerHTML = "";
 
           opepenArray.forEach((item) => {
@@ -596,9 +647,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
           });
-        }
 
-        pocketSize = false;
+          getConfiguration();
+        }
 
     }
 
@@ -607,6 +658,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.documentElement.style.setProperty('--popper-size', "calc(20% - 1.88px)");
 
         if (!gameOn) {
+
           mainElement.innerHTML = "";
 
           opepenArrayPocket.forEach((item) => {
@@ -620,9 +672,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
           });
+
+          getConfiguration();
         }
 
-        pocketSize = true;
     }
 
 

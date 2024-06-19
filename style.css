@@ -146,8 +146,8 @@ main.countdown.one::after {
 @keyframes correctPulse {
   0% {
     /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;*/
-    filter:brightness(1.0);
-    -webkit-filter:brightness(1.0);
+    filter:brightness(1.1);
+    -webkit-filter:brightness(1.1);
   }
   50% {
     /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 4vw white;*/
@@ -156,8 +156,8 @@ main.countdown.one::after {
   }
   100% {
     /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;*/
-    filter:brightness(1.0);
-    -webkit-filter:brightness(1.0);
+    filter:brightness(1.1);
+    -webkit-filter:brightness(1.1);
   }
 }
 
@@ -183,11 +183,13 @@ main.countdown.one::after {
   padding:1em;
   display: grid;
   place-content: center;
-  backdrop-filter:blur(4px) brightness(1.1) saturate(1.1);
-  -webkit-backdrop-filter:blur(4px) brightness(1.1) saturate(1.1);
+  backdrop-filter:blur(4px) saturate(.9); /* brightness(1.1) saturate(1.1); */
+  -webkit-backdrop-filter:blur(4px) saturate(.9); /* brightness(1.1) saturate(1.1); */
   background-image: linear-gradient(180deg, rgba(255,255,255,.1),rgba(255,255,255,0));
   transition:all .2s, transform 0s;
   width:inherit;
+
+  text-shadow: 0 0 2em black,0 0 1em black;
 }
 #menu.square.queued {
   opacity:0;
@@ -229,6 +231,11 @@ main.countdown.one::after {
 
   transform-origin: center;
   transform:translate(-90%, 10%) rotate(45deg);
+
+  opacity: .8;
+
+  /*color:var(--stop-opacity-2);
+  text-shadow: 0 2px 2px var(--stop-color-3);*/
 }
 #menutrigger .icon {
   max-width:40%;
@@ -250,6 +257,15 @@ main.countdown.one::after {
   max-width: calc(32ch);
   border-radius: .5em;
 }
+#menu textarea::selection {
+  background-color: var(--stop-color-3);
+  color:var(--stop-color-1);
+}
+#menu textarea::-moz-selection {
+  background-color: var(--stop-color-3);
+  color:var(--stop-color-1);
+}
+
 #menu #saveload_copy {
   margin-top: 0em;
   cursor: grab;
@@ -300,6 +316,10 @@ main.countdown.one::after {
 }
 .popper.capped.depressed::after {
   background-color: var(--stop-color-2);
+}
+
+.popper.correct {
+  animation:correctPulse 1s infinite;
 }
 
 .popper.black {
@@ -446,6 +466,10 @@ input#startgame[type=checkbox]:active,input#startgame[type=checkbox]:active::aft
 
 #time {
   display: block;
+  margin-top:-.5em;
+}
+#time + p {
+  margin-top: -.5em;
 }
 
 #invert, #clear, #reset {
