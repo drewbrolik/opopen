@@ -168,7 +168,7 @@ main.countdown.one::after {
   margin-right: auto;
   padding-top:10%;
   padding-bottom:10%;
-  width: 100%;
+  width: 80%;
 }
 #menu.stacked {
   margin-left:10%;
@@ -178,9 +178,35 @@ main.countdown.one::after {
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: blue;
+  top:0;
+  left:0;
   padding:1em;
-  width: fit-content;
+  display: grid;
+  place-content: center;
+  backdrop-filter:blur(4px) brightness(1.1) saturate(1.1);
+  -webkit-backdrop-filter:blur(4px) brightness(1.1) saturate(1.1);
+  background-image: linear-gradient(180deg, rgba(255,255,255,.1),rgba(255,255,255,0));
+  transition:all .2s, transform 0s;
+  width:100%;
+}
+#menu.square.queued {
+  opacity:0;
+  transform:scale(0);
+  transition:all .2s, transform .2s .2s;
+}
+
+#menutrigger {
+  display: none;
+  position: absolute;
+  left: 75%;
+  top:25%;
+  background-color: red;
+  width: 3%;
+  padding-bottom:3%;
+  border-radius: 50%;
+}
+#menu.square + #menutrigger {
+  display: block;
 }
 
 
