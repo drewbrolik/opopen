@@ -86,8 +86,8 @@ label {
 }
 
 main {
-  overscroll-behavior: none;
-  touch-action: none;
+  /*overscroll-behavior: none;
+  touch-action: none;*/
 }
 main {
   background-color:var(--bg-color);
@@ -98,9 +98,9 @@ main {
   position: relative;
   /*max-width: 900px;*/
   margin: auto;
-  padding:1vw;
-  box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35);
-  border-radius: .8vw;
+  padding:calc(var(--size-w) * .02); /*1vw;*/
+  box-shadow: 0 calc(var(--size-w) * .02) calc(var(--size-w) * .02) 0vw rgba(0,0,0,.15), 0 calc(var(--size-w) * .002) calc(var(--size-w) * .008) 0vw rgba(0,0,0,.35); /*0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35)*/
+  border-radius: calc(var(--size-w) * .016); /* .8vw;*/
 
   width:var(--size-w);
   height:var(--size-h);
@@ -187,7 +187,7 @@ main.countdown.one::after {
   -webkit-backdrop-filter:blur(4px) brightness(1.1) saturate(1.1);
   background-image: linear-gradient(180deg, rgba(255,255,255,.1),rgba(255,255,255,0));
   transition:all .2s, transform 0s;
-  width:100%;
+  width:inherit;
 }
 #menu.square.queued {
   opacity:0;
@@ -212,17 +212,28 @@ main.countdown.one::after {
 
   background-image: linear-gradient(105deg, rgba(255,255,255,.2), rgba(255,255,255,0));
   box-shadow: -.5em 0em 1em -.5em var(--stop-color-3), -.5em 0em 1em -.25em var(--stop-color-3);
+
+  cursor:grab;
+}
+#menutrigger:active {
+  cursor:grabbing;
 }
 #menu.square + #menutrigger {
   display: block;
 }
 #menutrigger > * {
   position: absolute;
-  right: 60%;
-  top:40%;
+  left:50%;
+  top:50%;
   margin: 0;
 
-  transform:rotate(0deg);
+  transform-origin: center;
+  transform:translate(-90%, 10%) rotate(45deg);
+}
+#menutrigger .icon {
+  max-width:40%;
+  max-height:40%;
+  margin-right: 0;
 }
 
 #menu textarea {
@@ -245,6 +256,25 @@ main.countdown.one::after {
 }
 #menu #saveload_copy:active {
   cursor: grabbing;
+}
+
+#menu #info {
+    font-size: .6em;
+    /*opacity: .6;*/
+    margin-top:4em;
+    color: rgba(255,255,255,.6);
+    /*text-shadow: 0 -1px 1px rgba(75,75,75,.25);*/
+}
+
+#menu #info p + p:not(#madein) {
+    margin-top:-1em;
+}
+
+#menu #model,#menu #serial {
+}
+
+#menu #madein {
+    text-transform: uppercase;
 }
 
 
@@ -350,6 +380,7 @@ input#startgame[type=checkbox] {
     -webkit-filter:saturate(0%);*/
     margin:0;
     padding:0;
+    border-radius: 0;
 }
 input#startgame[type=checkbox]::after {
     content:" ";
@@ -419,13 +450,16 @@ input#startgame[type=checkbox]:active,input#startgame[type=checkbox]:active::aft
 
 #invert, #clear, #reset {
   cursor: grab;
+  display: flex;
+  align-items: middle;
+  gap: 0;
 }
 #invert:active, #clear:active, #reset:active {
   cursor: grabbing;
 }
 
 .icon {
-  max-width:1em;
+  max-width:.75em;
   vertical-align: middle;
-  margin-right: 1em;
+  margin-right: .75em;
 }

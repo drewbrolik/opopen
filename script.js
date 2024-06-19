@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const saveloadElement = document.querySelector("#saveload");
     const saveLoadCopy = document.querySelector("#saveload_copy");
     const menuTriggerElement = document.querySelector("#menutrigger");
+    const model = document.getElementById("model");
+    const serial = document.getElementById("serial");
 
     let R = new Random();
     let RR = new Random();
@@ -58,7 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log(traits);
 
-
+    model.innerText = hl.tx.contractAddress.substr(0,10);
+    serial.innerText = hl.tx.hash.substr(0,8)+"-"+hl.tx.tokenId;
 
 
 
@@ -147,6 +150,9 @@ document.addEventListener("DOMContentLoaded", function () {
     menuTriggerElement.addEventListener('click', toggleQueuedMenu);
 
 
+
+
+
     /*let getConfig = getConfiguration();
     let checkConfig = checkConfiguration(getConfig);
     if (checkConfig) {
@@ -181,6 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
           document.body.classList.add("square");
           menuElement.classList.add("square");
           menuElement.classList.add("queued");
+          menuTriggerElement.querySelector("img").src = "./settings.svg";
         }
 
 
@@ -189,6 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (width > 700 && pocketSize) {
           resetBoard();
         }
+
+        getConfiguration();
 
     }
     resizeGame();
@@ -202,8 +211,10 @@ document.addEventListener("DOMContentLoaded", function () {
     function toggleQueuedMenu() {
         if (menuElement.classList.contains("queued")) {
             menuElement.classList.remove("queued");
+            menuTriggerElement.querySelector("img").src = "./close.svg";
         } else {
             menuElement.classList.add("queued");
+            menuTriggerElement.querySelector("img").src = "./settings.svg";
         }
     }
 
