@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    let pocketSize = false;
+    let pocketSize = window.innerWidth < 550 ? false : true; // opposite so things kick in with resize()
 
 
     const opepenArray = [
@@ -132,6 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (hl.context.previewMode) {
       menuTriggerElement.style.display = "none";
       hl.token.capturePreview();
+    } else {
+      menuTriggerElement.style.display = "";
     }
 
 
@@ -220,12 +222,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        if (width < 700 && !pocketSize) {
+        if (width < 550 && !pocketSize) {
             pocketSize = true;
             resetBoard();
-        } else if (width > 700 && pocketSize) {
+            document.documentElement.style.setProperty('--menu-trigger-icon-transform', "translate(-90%, -30%) rotate(45deg)");
+        } else if (width > 550 && pocketSize) {
             pocketSize = false;
             resetBoard();
+            document.documentElement.style.setProperty('--menu-trigger-icon-transform', "translate(-90%, 0%) rotate(45deg)");
+        }
+
+        if (width < 500) {
+            menuElement.style.placeContent = "flex-start";
+            menuElement.style["place-content"] = "flex-start";
+        } else {
+            menuElement.style.placeContent = "center";
         }
 
         getConfiguration();

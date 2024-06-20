@@ -34,6 +34,7 @@
   --size-mh:90vw;
 
   --font-size:12px;
+  --menu-trigger-icon-transform:translate(-90%, 0%) rotate(45deg);
 
   --countdown-content: "3";
 }
@@ -186,6 +187,8 @@ main.countdown.one::after {
   transition:all .2s, transform 0s;
   width:inherit;
 
+  overflow: auto;
+
   /*text-shadow: 0 0 4em black,0 0 2em black;*/
 }
 #menu.square.queued {
@@ -227,7 +230,7 @@ main.countdown.one::after {
   margin: 0;
 
   transform-origin: center;
-  transform:translate(-90%, 0%) rotate(45deg);
+  transform:var(--menu-trigger-icon-transform);
 
   opacity: .8;
 
