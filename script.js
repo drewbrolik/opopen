@@ -105,17 +105,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+    model.innerText = hl.tx.contractAddress.substr(0,10);
+    serial.innerText = hl.tx.hash.substr(0,8)+"-"+hl.tx.tokenId;
 
 
-    const traits = [];
-    traits["Base Color"] = hslToHex("hsl("+baseColor_2_h+","+baseColor_2_s+"%,22%)");
+
+
+    const traits = {};
+    traits["Color"] = hslToHex("hsl("+baseColor_2_h+","+baseColor_2_s+"%,22%)");
     traits["Shadow Color"] = hslToHex("hsl("+baseColor_3_h+","+baseColor_3_s+"%,9%)");
     traits["Nubs"] = capped ? "Yes" : "No";
     traits["Base State"] = invert ? "Pressed" : "Depressed";
     traits["Model No"] = hl.tx.contractAddress;
     traits["Serial No"] = hl.tx.hash+"-"+hl.tx.tokenId;
-
-    console.log(traits);
 
     //console.log(traits);
     hl.token.setTraits(traits);
@@ -126,8 +128,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    model.innerText = hl.tx.contractAddress.substr(0,10);
-    serial.innerText = hl.tx.hash.substr(0,8)+"-"+hl.tx.tokenId;
+
+    if (hl.context.previewMode) {
+      menuTriggerElement.style.display = "none";
+      hl.token.capturePreview();
+    }
 
 
 
@@ -345,7 +350,8 @@ document.addEventListener("DOMContentLoaded", function () {
         randomPopper[randomNum].classList.add("highlighted");
         setTimeout(function() { randomPopper[randomNum].classList.remove("highlighted"); },1000);
 
-        startGameInterval -= startGameInterval <= pocketSize ? 500 : 1000 ? 0 : pocketSize ? 100 : 50;
+        startGameInterval -= (startGameInterval <= (pocketSize ? 1000 : 1000) ? 0 : (pocketSize ? 100 : 50));
+        console.log(startGameInterval);
         startGameTimeout = setTimeout(startGame,startGameInterval);
     }
 
@@ -383,7 +389,9 @@ document.addEventListener("DOMContentLoaded", function () {
             //startGameTimeout = setTimeout(startGame,3000);
             //getAndCheck();
             disableFreeMode();
-            toggleQueuedMenu(e,true);
+            setTimeout(function() {
+              toggleQueuedMenu(e,true);
+            },250);
 
             startGameStatus.textContent = "End Game";
 

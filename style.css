@@ -125,7 +125,7 @@ main.countdown::after {
   width:1em;
   height:1em;
   line-height: 1em;
-  font-size:3em;
+  font-size:3.6em;
   text-align: center;
   background-color: black;
   color: white;
@@ -145,17 +145,14 @@ main.countdown.one::after {
 
 @keyframes correctPulse {
   0% {
-    /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;*/
     filter:brightness(1.1);
     -webkit-filter:brightness(1.1);
   }
   50% {
-    /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 4vw white;*/
     filter:brightness(1.2);
     -webkit-filter:brightness(1.2);
   }
   100% {
-    /*box-shadow: 0 1vw 1vw 0vw rgba(0,0,0,.15), 0 .1vw .4vw 0vw rgba(0,0,0,.35), 0 0 2vw white;*/
     filter:brightness(1.1);
     -webkit-filter:brightness(1.1);
   }
@@ -189,7 +186,7 @@ main.countdown.one::after {
   transition:all .2s, transform 0s;
   width:inherit;
 
-  text-shadow: 0 0 2em black,0 0 1em black;
+  /*text-shadow: 0 0 4em black,0 0 2em black;*/
 }
 #menu.square.queued {
   opacity:0;
@@ -230,7 +227,7 @@ main.countdown.one::after {
   margin: 0;
 
   transform-origin: center;
-  transform:translate(-90%, 10%) rotate(45deg);
+  transform:translate(-90%, 0%) rotate(45deg);
 
   opacity: .8;
 
@@ -241,6 +238,10 @@ main.countdown.one::after {
   max-width:40%;
   max-height:40%;
   margin-right: 0;
+}
+
+#menu label {
+  opacity: .6;
 }
 
 #menu textarea {
